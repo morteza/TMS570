@@ -27,14 +27,6 @@ typedef volatile struct gioBase
 */
 typedef volatile struct gioPort
 {
-    unsigned DIR;    /**< 0x0000: Data Direction Register */
-    unsigned DIN;    /**< 0x0004: Data Input Register */
-    unsigned DOUT;   /**< 0x0008: Data Output Register */
-    unsigned DSET;   /**< 0x000C: Data Output Set Register */
-    unsigned DCLR;   /**< 0x0010: Data Output Clear Register */
-    unsigned PDR;    /**< 0x0014: Open Drain Regsiter */
-    unsigned PULDIS; /**< 0x0018: Pullup Disable Register */
-    unsigned PSL;    /**< 0x001C: Pull Up/Down Selection Register */
 } gioPORT_t;
 
 
