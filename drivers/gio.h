@@ -1,10 +1,9 @@
 /** @file gio.h
 *   @brief GIO Driver Definition File
-*   @author Morteza <ansarinia@aut.ac.ir>
-*   @date 2011
-*   @version 1.0
+*   @date 11.August.2009
+*   @version 1.00.000
 *   
-*   (c) AUTSat 2011, All rights reserved.
+*   (c) Texas Instruments 2009, All rights reserved.
 */
 
 
@@ -13,6 +12,8 @@
 
 /** @struct gioBase
 *   @brief GIO Base Register Definition
+*
+*   This structure is used to access the GIO module egisters.
 */
 typedef volatile struct gioBase
 {
@@ -48,21 +49,30 @@ typedef volatile struct gioPort
 
 /** @def gioREG
 *   @brief GIO Register Frame Pointer
+*
+*   This pointer is used by the GIO driver to access the gio module registers.
 */
 #define gioREG   ((gioBASE_t *)0xFFF7BC00U)
 
 /** @def gioPORTA
 *   @brief GIO Port (A) Register Pointer
+*
+*   Pointer used by the GIO driver to access PORTA
 */
 #define gioPORTA ((gioPORT_t *)0xFFF7BC34U)
 
 /** @def gioPORTB
 *   @brief GIO Port (B) Register Pointer
+*
+*   Pointer used by the GIO driver to access PORTB
 */
 #define gioPORTB ((gioPORT_t *)0xFFF7BC54U)
 
 
+
+
 /* GIO Interface Functions */
+
 void gioInit(void);
 void gioSetDirection(gioPORT_t *port, unsigned dir);
 void gioSetBit(gioPORT_t *port, unsigned bit, unsigned value);

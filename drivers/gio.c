@@ -1,17 +1,19 @@
 /** @file gio.c 
-*   @brief Custom TMS570 Board GIO Driver Inmplmentation File
-*   @author Morteza <ansarinia@aut.ac.ir>
-*   @date November.2011
-*   @version 1.0
+*   @brief GIO Driver Implementation File
+*   @date 11.August.2009
+*   @version 1.00.000
 *
-*   (c) AUTSat 2011, All rights reserved.
+*   (c) Texas Instruments 2009, All rights reserved.
 */
 
 #include "gio.h"
 
 
 /** @fn void gioInit(void)
-*   @brief Initializes the GIO Driver (Pins A[2] and A[3] are I2C Ports for RTI support)
+*   @brief Initializes the GIO Driver
+*
+*   This function initializes the GIO module and set the GIO ports 
+*   to the inital values.
 */
 void gioInit(void)
 {
@@ -20,7 +22,7 @@ void gioInit(void)
     gioREG->INTENACLR = 0xFF;
     gioREG->LVLCLR    = 0xFF;              
 
-    /** @b initalise @b Port @b A */
+    /** @b initalise Port A @b */
 
     /** - Port A output values */
     gioPORTA->DOUT =  0        /* Bit 0 */
@@ -32,15 +34,15 @@ void gioInit(void)
                    | (0 << 6)  /* Bit 6 */
                    | (0 << 7); /* Bit 7 */
 
-    /** - Port A direction */
-    gioPORTA->DIR  =  0        /* Bit 0 */
-                   | (0 << 1)  /* Bit 1 */
+    /** - Port A direction */   //Prathap changed all values to 1
+    gioPORTA->DIR  =  1        /* Bit 0 */
+                   | (1 << 1)  /* Bit 1 */
                    | (1 << 2)  /* Bit 2 */
                    | (1 << 3)  /* Bit 3 */
-                   | (0 << 4)  /* Bit 4 */
-                   | (0 << 5)  /* Bit 5 */
-                   | (0 << 6)  /* Bit 6 */
-                   | (0 << 7); /* Bit 7 */
+                   | (1 << 4)  /* Bit 4 */
+                   | (1 << 5)  /* Bit 5 */
+                   | (1 << 6)  /* Bit 6 */
+                   | (1 << 7); /* Bit 7 */
 
     /** - Port A open drain enable */
     gioPORTA->PDR  =  0        /* Bit 0 */
@@ -72,8 +74,7 @@ void gioInit(void)
                       | (0 << 6)  /* Bit 6 */
                       | (0 << 7); /* Bit 7 */
 
-#if 1
-    /** @b initalise @b Port @b B */
+    /** @b initalise Port B @b */
 
     /** - Port B output values */
     gioPORTB->DOUT =  0        /* Bit 0 */
@@ -124,10 +125,9 @@ void gioInit(void)
                       | (0 << 5)  /* Bit 5 */
                       | (0 << 6)  /* Bit 6 */
                       | (0 << 7); /* Bit 7 */
-#endif
 
 
-    /** @b initalise @b interrupts */
+    /** * @b initalise interrupts @b */
 
     /** - interrupt polarity */
     gioREG->POL =  0        /* Bit 0 */
@@ -166,7 +166,13 @@ void gioInit(void)
 
 
 /** @fn void gioSetDirection(gioPORT_t *port, unsigned dir)
-*   @brief Set Port Direction
+*   @breif Set Port Direction
+*   @param[in] port pointer to GIO port:
+*              - gioPORTA: PortA pointer
+*              - gioPORTB: PortB pointer
+*   @param[in] dir value to write to DIR register
+*
+*   Set the direction of GIO pins at runtime.
 */
 void gioSetDirection(gioPORT_t *port, unsigned dir)
 {
@@ -176,6 +182,15 @@ void gioSetDirection(gioPORT_t *port, unsigned dir)
 
 /** @fn void gioSetBit(gioPORT_t *port, unsigned bit, unsigned value)
 *   @brief Write Bit
+*   @param[in] port pointer to GIO port:
+*              - gioPORTA: PortA pointer
+*              - gioPORTB: PortB pointer
+*   @param[in] bit number 0-7 that specifies the bit to be written to.
+*              - 0: LSB
+*              - 7: MSB
+*   @param[in] value binrary value to write to bit
+*
+*   Writes a value to the specified pin of the given GIO port
 */
 void gioSetBit(gioPORT_t *port, unsigned bit, unsigned value)
 {
@@ -190,8 +205,14 @@ void gioSetBit(gioPORT_t *port, unsigned bit, unsigned value)
 }
 
 
-/** @fn void gioSetPort(gioPORT_t *port, unsigned value)
+/** @fn gioSetPort gioSetPort(gioPORT_t *port, unsigned value)
 *   @brief Write Port Value
+*   @param[in] port pointer to GIO port:
+*              - gioPORTA: PortA pointer
+*              - gioPORTB: PortB pointer
+*   @param[in] value value to write to port
+*
+*   Writes a value to all pin of a given GIO port
 */
 void gioSetPort(gioPORT_t *port, unsigned value)
 {
@@ -199,8 +220,16 @@ void gioSetPort(gioPORT_t *port, unsigned value)
 }
 
 
-/** @fn unsigned gioGetBit(gioPORT_t *port, unsigned bit)
+/** @fn void gioGetBit(gioPORT_t *port, unsigned bit)
 *   @brief Read Bit
+*   @param[in] port pointer to GIO port:
+*              - gioPORTA: PortA pointer
+*              - gioPORTB: PortB pointer
+*   @param[in] bit number 0-7 that specifies the bit to be written to.
+*              - 0: LSB
+*              - 7: MSB
+*
+*   Reads a the current value from the specified pin of the given GIO port
 */
 unsigned gioGetBit(gioPORT_t *port, unsigned bit)
 {
@@ -208,8 +237,13 @@ unsigned gioGetBit(gioPORT_t *port, unsigned bit)
 }
 
 
-/** @fn unsigned gioGetPort(gioPORT_t *port)
+/** @fn gioGetPort gioGetPort(gioPORT_t *port)
 *   @brief Read Port Value
+*   @param[in] port pointer to GIO port:
+*              - gioPORTA: PortA pointer
+*              - gioPORTB: PortB pointer
+*
+*   Reads a the current value of a given GIO port
 */
 unsigned gioGetPort(gioPORT_t *port)
 {
@@ -217,11 +251,13 @@ unsigned gioGetPort(gioPORT_t *port)
 }
 
 
-/** @fn void gioEnableNotification(unsigned bit)
-*   @brief Enable Interrupt
+/** @fn gioEnableNotification(unsigned bit)
+*   @breif Enable Interrupt
 *   @param[in] bit interrupt pin to enable
 *              - 0: LSB
 *              - 7: MSB
+*
+*   Enables an innterrupt pin of PortA
 */
 void gioEnableNotification(unsigned bit)
 {
@@ -229,11 +265,13 @@ void gioEnableNotification(unsigned bit)
 }
 
 
-/** @fn void gioDisableNotification(unsigned bit)
-*   @brief Disable Interrupt
+/** @fn gioDisableNotification(unsigned bit)
+*   @breif Disable Interrupt
 *   @param[in] bit interrupt pin to enable
 *              - 0: LSB
 *              - 7: MSB
+*
+*   Disables an innterrupt pin of PortA
 */
 void gioDisableNotification(unsigned bit)
 {
@@ -243,10 +281,10 @@ void gioDisableNotification(unsigned bit)
 
 /** @fn void gioHighLevelInterrupt(void)
 *   @brief GIO Interrupt Handler
+*
+*   High Level Interrupt handler for GIO pin interrupt 
+*
 */
-#if 0
-    #pragma INTERRUPT(gioHighLevelInterrupt, IRQ)
-#endif
 
 void gioHighLevelInterrupt(void)
 {
@@ -261,10 +299,11 @@ void gioHighLevelInterrupt(void)
 
 /** @fn void gioLowLevelInterrupt(void)
 *   @brief GIO Interrupt Handler
+*
+*   Low Level Interrupt handler for GIO pin interrupt 
+*
 */
-#if 0
-    #pragma INTERRUPT(gioLowLevelInterrupt, IRQ)
-#endif
+
 
 void gioLowLevelInterrupt(void)
 {
@@ -276,4 +315,10 @@ void gioLowLevelInterrupt(void)
     }
 }
 
-#endif
+
+/** @fn void gioNotification(int bit)
+*   @brief function used by Interrupt Service routine
+*/
+void gioNotification(int bit)
+{
+}

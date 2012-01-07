@@ -9,6 +9,8 @@
 #ifndef GIOPORT_H_
 #define GIOPORT_H_
 
+#include <stdint.h>
+
 class GIOPort {
 public:
 	GIOPort();

@@ -6,7 +6,6 @@
  */
 
 #include "GIOPort.h"
-#include <stdint.h>
 
 GIOPort::GIOPort() {
 	// TODO Auto-generated constructor stub
